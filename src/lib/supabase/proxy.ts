@@ -19,7 +19,7 @@ export async function updateSession(request: NextRequest) {
     },
   });
   // Supabase's confirmation email returns PKCE signups to the configured
-  // Site URL (currently the local app root) with a one-time code. Exchange it
+  // site URL with a one-time code. Exchange it
   // before the dashboard's ordinary unauthenticated redirect can discard it.
   if (request.nextUrl.pathname === "/" &&
       (request.nextUrl.searchParams.has("code") || request.nextUrl.searchParams.has("error"))) {

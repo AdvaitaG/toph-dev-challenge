@@ -230,6 +230,7 @@ input[type="checkbox"]:indeterminate::after { content: ''; width: 7px; height: 1
   .dashboard-header h1 { font-size: 22px; }
   .dashboard-header p { font-size: 13px; margin-top: 4px; }
   .mobile-directory-link { display: inline-block; margin-top: 8px; color: #176a49; font-size: 13px; }
+  .mobile-directory-link + .mobile-directory-link { margin-left: 12px; }
   .search-field { width: 100%; height: 36px; margin-top: 18px; }
   .metrics-grid { gap: 6px; }
   .metric-card { height: 110px; padding: 12px 10px; border-radius: 10px; }

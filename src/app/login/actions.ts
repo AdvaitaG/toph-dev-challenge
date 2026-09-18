@@ -44,7 +44,7 @@ export async function signIn(_previous: LoginState, form: FormData): Promise<Log
   try {
     const supabase = await createClient({ writable: true });
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    if (error?.code === "email_not_confirmed") return { error: "Confirm your email first, then sign in. Keep the local app running when opening the confirmation link." };
+    if (error?.code === "email_not_confirmed") return { error: "Confirm your email first, then sign in." };
     if (error) return { error: "Unable to sign in. Check your email and password and try again." };
   } catch {
     return { error: "Sign-in is temporarily unavailable. Please try again." };

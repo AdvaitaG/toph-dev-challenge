@@ -37,7 +37,7 @@ export async function signUpEmployee(_previous: SignupState, form: FormData): Pr
       options: { data: { signup_intent: "employee", full_name: fullName } },
     });
     if (error) return { error: signupError(error.code), success: "" };
-    if (!data.session) return { error: "", success: "If this is a new account, check your email to confirm it. Already confirmed? Sign in below. The local app must be running when you open the email link." };
+    if (!data.session) return { error: "", success: "If this is a new account, check your email to confirm it. Already confirmed? Sign in below." };
   } catch {
     return { error: "Signup is temporarily unavailable. Please try again.", success: "" };
   }
