@@ -1,0 +1,15 @@
+.page { min-height: 100dvh; display: grid; place-items: center; padding: 24px; background: #fafbf9; }
+.card { width: 100%; max-width: 400px; padding: 32px; border: 1px solid #e9e9e9; border-radius: 16px; background: white; }
+.brand { color: #146c44; font-weight: 600; margin-bottom: 24px; }
+.card h1 { font-size: 24px; font-weight: 600; }
+.subtitle { margin-top: 8px; color: #666; line-height: 1.5; }
+.form { display: grid; gap: 20px; margin-top: 28px; }
+.form label { display: grid; gap: 8px; }
+.form input { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #ddd; border-radius: 7px; background: white; }
+.form button { min-height: 42px; border-radius: 7px; background: #146c44; color: white; }
+.form button:disabled { opacity: .65; }
+.googleForm { margin-top: 28px; }
+.googleButton { width: 100%; min-height: 42px; border: 1px solid #d8ded9; border-radius: 7px; background: white; color: #202622; font-weight: 600; }
+.googleButton:hover { background: #f5f8f6; }
+.divider { margin: 20px 0 0; color: #777; font-size: 13px; text-align: center; }
+.error { color: #a03725; font-size: 13px; line-height: 1.5; }

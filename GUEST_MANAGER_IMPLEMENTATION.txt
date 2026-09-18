@@ -1,0 +1,59 @@
+TOPH: GUEST MANAGER AND CURRENT APP BEHAVIOR
+Updated September 17, 2026
+
+WHAT IS NEW
+
+Opening the app at / now shows the original Toph manager dashboard immediately.
+A visitor does not need to create an account or sign in to explore it. The
+sidebar identifies the visitor as "Guest Manager · Read-only" and provides a
+Sign In link. Signing out of a manager or employee account returns to this
+guest dashboard.
+
+The guest dashboard uses safe, local demo records from the April 22, 2026
+design snapshot. It shows the four original pending employee logs and the
+snapshot metric values 5 / 12 / 90. These numbers are demonstration values,
+not live counts for the current day. The guest can search, sort, filter, open
+logs, read summaries, and inspect the map preview.
+
+Guests can also open Activity Logs to see the complete demo history, including
+the approved sample log, and open Employees to see sample worker names. Guest
+pages do not show real employee contact emails or private farm data. Original
+demo recordings have no audio files, so their playback control reports that
+the recording is unavailable.
+
+READ-ONLY SECURITY
+
+Guest pages do not offer Approve, Add Tag, Remove activity, employee-email
+editing, or employee submission controls. An unsigned-in visitor also cannot
+use crafted requests to gain those permissions: server actions still verify
+the signed-in user's farm role, and Supabase row-level security still limits
+database access. No public database-read policy or service-role browser key
+was added for guest mode.
+
+WHAT SIGN-IN DOES
+
+Sign In still offers Google and email/password. Google sign-in identifies the
+person; it does not make an arbitrary Google account a manager. The existing
+Supabase profile determines the person's role:
+
+- The existing authorized manager account opens the live manager dashboard.
+  It reads Supabase data and keeps persistent approval, Needs Review tags,
+  eligible activity deletion, and employee contact editing.
+- A newly created account receives the employee role in the Bays Ranch demo.
+  It opens /employee to submit a written note or voice recording. It cannot
+  open manager-only live pages or perform manager mutations.
+
+For signed-in managers, the dashboard metrics remain live: Today's Recordings
+counts employee submissions made on the farm's current local date; Active
+Workers counts the four original workers plus active employee accounts; and
+Response Accuracy uses the scored snapshot logs. Activity Logs shows the full
+database history, while the dashboard queue shows only pending logs.
+
+VERIFICATION AND DEPLOYMENT
+
+All 33 browser tests passed, including guest navigation, read-only behavior,
+Google-role routing, sign-out to guest mode, and existing manager/employee
+flows. Lint, TypeScript, the production build, and local PostgreSQL/RLS checks
+also passed. The app has not been committed, pushed to Git, or deployed to
+Vercel. Production deployment still needs Vercel environment variables and
+OAuth redirect settings for the deployed URL.

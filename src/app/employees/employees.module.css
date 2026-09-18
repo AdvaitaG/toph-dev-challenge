@@ -1,0 +1,29 @@
+.main { max-width: 1640px; }
+.backLink { display: inline-block; margin-top: 12px; color: #176a49; font-size: 13px; text-decoration: none; }
+.backLink:hover { text-decoration: underline; }
+.panel { border: 1px solid #ededed; border-radius: 20px; overflow: hidden; }
+.panelHeader { min-height: 76px; padding: 18px 28px; }
+.panelHeader h2 { margin: 0; font-size: 16px; font-weight: 500; }
+.panelHeader h2 span { color: #999; font-weight: 400; }
+.panelHeader p { margin: 5px 0 0; color: #777; font-size: 13px; }
+.tableScroll { overflow-x: auto; }
+.table { width: 100%; min-width: 620px; border-collapse: collapse; text-align: left; }
+.table thead { border-top: 1px solid #ededed; border-bottom: 1px solid #ededed; color: #aaa; text-transform: uppercase; font-size: 12px; }
+.table th, .table td { padding: 16px 28px; }
+.table th:first-child { width: 30%; }
+.table th:last-child { width: 130px; }
+.table tbody tr + tr { border-top: 1px solid #f1f1f1; }
+.table tbody th { font-weight: 500; }
+.contactCell { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.contactCell a { color: #176a49; overflow-wrap: anywhere; }
+.missing { color: #999; }
+.editButton { color: #176a49; padding: 4px 0; font-size: 12px; text-decoration: underline; text-underline-offset: 2px; }
+.emailForm { display: flex; gap: 8px; flex-wrap: wrap; }
+.emailForm input { min-width: 220px; height: 34px; padding: 0 10px; border: 1px solid #d7e3da; border-radius: 6px; }
+.emailForm button { padding: 0 10px; border: 1px solid #d7e3da; border-radius: 6px; }
+.emailForm button[type="submit"] { background: #176a49; color: #fff; }
+.error { width: 100%; margin: 0; color: #a03725; font-size: 12px; }
+.active { color: #176a49; }
+.inactive { color: #888; }
+.noResults { padding: 35px 28px; color: #777; text-align: center; }
+@media (max-width: 650px) { .panelHeader { padding: 16px; } .table th, .table td { padding: 14px 16px; } }

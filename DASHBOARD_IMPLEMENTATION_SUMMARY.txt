@@ -1,0 +1,101 @@
+TOPH DASHBOARD: WHAT HAS BEEN IMPLEMENTED
+Status: September 17, 2026
+
+ORIGINAL CHALLENGE
+The supplied design asked for a high-fidelity farm dashboard with a sidebar,
+three metrics, four employee activity rows, and an expanded row showing a
+recording, tags, summary, and map. The challenge also asked for a persistent
+backend and a hosted site. The later user-adopted "Wow Us" plan expanded the
+scope. The original screenshots remain the visual reference for the dashboard.
+
+DASHBOARD AND INTERACTIONS
+- The default route is now a read-only Guest Manager view of the original
+  Figma dashboard. It uses safe demo fixtures and needs no account. Guest
+  Activity Logs and Employees pages are viewable, without private contact
+  emails or mutation controls. Sign In offers Google or email authentication.
+- Built the responsive dashboard from the supplied screenshots and Figma
+  exports, including the sidebar, farm header, metric cards, four original
+  activity rows, and inline expanded details.
+- Any log row can be opened and closed. Expanded details show its summary,
+  recording control, tag controls, illustrative waveform, and map preview.
+- Added employee/activity/field search, oldest/newest/name sorting, activity
+  and field filters, date-range filtering, tag filtering, row selection, empty
+  states, and keyboard-accessible controls.
+- "This Month" now filters against the farm's actual current calendar month
+  when clicked. It starts off so the April 2026 design-snapshot rows are still
+  visible on first load.
+- The original seed recordings have no audio files, so their player says the
+  recording is unavailable. Employee-uploaded audio can be played by the
+  manager. The waveform is illustrative, not generated from the audio.
+- The map uses the supplied design image, clearly labeled as a preview. A
+  location-aware, data-driven map is not implemented yet.
+
+REAL DATA AND SECURITY
+- Replaced fixture reads in the live dashboard with Supabase/PostgreSQL reads
+  while keeping the same UI-facing DashboardData contract. Database errors are
+  reported; they do not silently switch the dashboard back to fixtures.
+- Added version-controlled migrations for farms, user profiles, employees,
+  fields, activity logs, recordings, reusable tags, and log/tag assignments.
+  Seed records reproduce the four original visible logs and April 22, 2026
+  demo snapshot. Other supporting seed records are synthetic.
+- Added Supabase Auth with email/password and Google sign-in, server-side
+  sessions, farm-level row-level security, and manager/employee role checks.
+  The manager account is advaita.guruprasad@gmail.com. New public signups
+  become employees in the Bays Ranch demo; a browser cannot grant itself a
+  manager role. Google sign-in was reported working after provider setup.
+- Stored employee audio in a private Supabase Storage bucket. Manager playback
+  uses short-lived signed URLs; a privileged service-role key is not sent to
+  the browser.
+
+NEW EMPLOYEE AND MANAGER WORKFLOWS
+- Added public employee account creation and a separate employee page at
+  /employee. Employees can submit a written activity note or record up to
+  90 seconds of audio. When browser speech recognition is available, it can
+  create an editable transcript; employees can also type or correct the text.
+- Saves employee submissions as persistent activity records. Managers see
+  them in the dashboard and can remove employee-submitted entries and their
+  stored audio. The original design-snapshot rows are protected from removal.
+- Added persistent reusable tags, including adding/removing a tag, duplicate
+  checks, and a "Needs Review" tag filter. Tags remain separate from review
+  status. Managers can approve or deny pending logs, with an optional short
+  denial reason. Approved logs remain on the Dashboard; denied logs remain
+  in Activity Logs history. Needs Review tags remain independent.
+- Added /activity-logs for complete farm history with search and employee,
+  activity, field, and pending/approved/denied filters. Signed-in managers use live
+  records and full controls; guests see a read-only demo history.
+- Added an Employees page at /employees. Signed-in managers see the workers
+  counted by Active Workers and their contact emails when known; guests see
+  only sample names without contact emails. The manager can add
+  or edit an address. Seed workers without supplied emails show "No email on
+  file" instead of a fabricated address. Account-linked emails are kept in
+  sync from Auth.
+
+METRICS
+- Guest metrics preserve the April 22 design snapshot values of 5, 12, and
+  90. They are clearly demo values, separate from the live manager metrics.
+- "Today's Recordings" starts at zero for the April snapshot and counts
+  employee activities submitted on the farm's actual local date. Written
+  submissions count too. Removing one lowers the count.
+- "Active Workers" starts with the four original named workers (Isaac Wang,
+  Maya Patel, Liam Johnson, Sophia Lee) and adds active employee accounts.
+- "Response Accuracy" remains the average of scored snapshot logs, 90 in
+  the seeded data. New unscored employee submissions do not alter it.
+
+VALIDATION AND CURRENT LIMITS
+- The app has lint/type checks, a production build, browser interaction tests,
+  SQL/RLS checks, and live Supabase smoke checks for core employee submission,
+  audio playback, and manager removal. The most recent browser suite passed
+  33/33 tests. These checks do not prove every third-party OAuth browser path.
+- The app runs locally with `npm run dev` at http://localhost:3000 after its
+  local Supabase environment is configured. It has not been deployed to Vercel,
+  committed, or pushed by this project work.
+- Remaining optional work includes a live map, audio for the four original
+  seed rows, and server-side transcription. Browser speech recognition varies
+  by browser and may depend on the browser's speech service. Manager email
+  notifications were explicitly dropped from scope.
+- Public signup currently joins the single Bays Ranch demo farm. A broader
+  production rollout would need invitation/farm assignment and abuse controls.
+
+Key implementation files: src/lib/queries/dashboard.ts, src/types/dashboard.ts,
+src/components/dashboard/, src/components/logs/, src/app/employee/,
+src/app/employees/, src/app/login/, src/app/signup/, and supabase/migrations/.
