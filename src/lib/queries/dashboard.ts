@@ -48,6 +48,7 @@ function guestActivityData(includeHistory: boolean): DashboardData {
     currentDate: dateInTimezone(new Date().toISOString(), demoFarm.timezone),
     source: "fixtures",
     logs,
+    pendingApprovals: 1,
     // These are disclosed April 22 snapshot values, not live farm metrics.
     metrics: { todaysRecordings: 5, newRecordings: 1, activeWorkers: demoEmployees.length, responseAccuracy: 90 },
   };
@@ -64,6 +65,7 @@ export function getGuestActivityLogsData(): DashboardData {
 export function getGuestEmployeeDirectoryData(): EmployeeDirectoryData {
   return {
     farmName: demoFarm.name,
+    pendingApprovals: 1,
     employees: demoEmployees.map((employee) => ({
       id: employee.id, name: employee.name, active: employee.active, email: null,
     })).sort((a, b) => a.name.localeCompare(b.name)),
@@ -134,6 +136,7 @@ async function loadActivityData(includeHistory: boolean): Promise<DashboardData>
     }));
   return {
     farm, referenceDate: REFERENCE_DATE, currentDate: today, source: "supabase", logs,
+    pendingApprovals: activityLogs.filter((row) => row.review_status === "pending").length,
     metrics: {
       todaysRecordings: todaysSubmissions.length,
       newRecordings: todaysSubmissions.length,
@@ -154,7 +157,7 @@ export async function getActivityLogsData(): Promise<DashboardData> {
 export async function getEmployeeDirectoryData(): Promise<EmployeeDirectoryData> {
   const { supabase, farmId, canManage } = await getFarmAccess();
   if (!canManage) throw new Error("Only managers can load the employee directory.");
-  const [farm, employees, profiles] = await Promise.all([
+  const [farm, employees, profiles, pendingLogs] = await Promise.all([
     supabase.from("farms").select("name").eq("id", farmId).single(),
     readAll((from, to) => supabase.from("employees")
       .select("id, full_name, active, contact_email")
@@ -162,11 +165,15 @@ export async function getEmployeeDirectoryData(): Promise<EmployeeDirectoryData>
     readAll((from, to) => supabase.from("profiles")
       .select("id, role, employee_id")
       .eq("farm_id", farmId).order("id").range(from, to), "employee accounts"),
+    readAll((from, to) => supabase.from("activity_logs")
+      .select("id").eq("farm_id", farmId).eq("review_status", "pending")
+      .order("id").range(from, to), "pending approvals"),
   ]);
   if (farm.error || !farm.data) throw new Error("Unable to load your farm.");
   const countedWorkerIds = activeWorkerIds(employees, profiles);
   return {
     farmName: farm.data.name,
+    pendingApprovals: pendingLogs.length,
     employees: employees.filter((row) => countedWorkerIds.has(row.id)).map((row) => ({
       id: row.id, name: row.full_name, active: row.active, email: row.contact_email,
     })).sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id)),

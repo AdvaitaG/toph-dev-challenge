@@ -11,6 +11,7 @@ const groups = [
 interface SidebarProps {
   activePage: "dashboard" | "employees" | "activity logs";
   farmName: string;
+  pendingApprovals: number;
   onInfo: () => void;
   onUnavailable: (label: string) => void;
   onLogout: () => void;
@@ -18,7 +19,7 @@ interface SidebarProps {
   guest?: boolean;
 }
 
-export function Sidebar({ activePage, farmName, onInfo, onUnavailable, onLogout, loggingOut, guest = false }: SidebarProps) {
+export function Sidebar({ activePage, farmName, pendingApprovals, onInfo, onUnavailable, onLogout, loggingOut, guest = false }: SidebarProps) {
   return (
     <aside className="sidebar" aria-label="Farm navigation">
       <div className="farm-profile">
@@ -32,6 +33,7 @@ export function Sidebar({ activePage, farmName, onInfo, onUnavailable, onLogout,
           {group.items.map(({ label, icon: Icon }) => label === "Dashboard" || label === "Employees" || label === "Activity Logs" ? (
             <Link key={label} className={`nav-item${activePage === label.toLowerCase() ? " active" : ""}`} href={label === "Dashboard" ? (activePage === "dashboard" ? "#main-content" : "/") : label === "Employees" ? "/employees" : "/activity-logs"} aria-current={activePage === label.toLowerCase() ? "page" : undefined} title={label}>
               <Icon size={16} aria-hidden="true" /><span>{label}</span>
+              {label === "Dashboard" && pendingApprovals > 0 && <span className="nav-badge" aria-hidden="true">{pendingApprovals}</span>}
             </Link>
           ) : (
             <button key={label} className="nav-item" title={label} onClick={() => onUnavailable(label)}><Icon size={16} aria-hidden="true" /><span>{label}</span></button>

@@ -157,6 +157,7 @@ input[type="checkbox"]:indeterminate::after { content: ''; width: 7px; height: 1
 .nav-group { margin-bottom: 10px; }
 .nav-group-label { margin: 0 10px 4px; padding-block: 4px; font-size: 10px; font-weight: 500; line-height: 13px; color: #b3b3b3; }
 .nav-item { height: 38px; font-size: 14px; }
+.nav-badge { margin-left: auto; min-width: 20px; height: 14px; padding-inline: 3px; border: .5px solid #00693942; border-radius: 10px; background: #019c2580; color: white; font-size: 10px; line-height: 13px; text-align: center; }
 .sidebar-footer { gap: 10px; }
 .dashboard-main { margin-left: 330px; padding: 30px 40px 40px 0; }
 .dashboard-header { align-items: center; margin-bottom: 30px; }

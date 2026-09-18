@@ -97,6 +97,7 @@ test("Employees tab lists counted workers, saves contact emails, and supports se
   await page.getByRole("link", { name: "Employees" }).click();
   await expect(page).toHaveURL(/\/employees$/);
   await expect(page.getByRole("heading", { name: "All employees (4)" })).toBeVisible();
+  await expect(page.locator(".nav-badge")).toHaveText("4");
   await expect(page.getByRole("rowheader", { name: "Isaac Wang" })).toBeVisible();
   await expect(page.getByRole("rowheader", { name: "Alex Rivera" })).toHaveCount(0);
   await page.getByRole("button", { name: "Add email for Isaac Wang" }).click();
@@ -113,6 +114,7 @@ test("Employees tab lists counted workers, saves contact emails, and supports se
 });
 
 test("manager approves and denies submissions; history, reasons, and tags persist", async ({ page }) => {
+  await expect(page.locator(".nav-badge")).toHaveText("4");
   const cookie = (await page.context().cookies()).find((item) => item.name.endsWith("auth-token"))!;
   const session = JSON.parse(Buffer.from(cookie.value.slice(7), "base64url").toString());
   const added = await page.request.post("http://127.0.0.1:54331/__test/control", {
@@ -124,6 +126,7 @@ test("manager approves and denies submissions; history, reasons, and tags persis
   });
   expect(second.ok()).toBe(true);
   await page.reload();
+  await expect(page.locator(".nav-badge")).toHaveText("6");
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" })).toHaveCount(2);
   await page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Irrigation" }).getByRole("button", { name: "View Anthony Wells's log" }).click();
   await page.getByRole("button", { name: "Add Tag" }).click();
@@ -134,18 +137,21 @@ test("manager approves and denies submissions; history, reasons, and tags persis
   await page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Irrigation" }).getByRole("button", { name: "View Anthony Wells's log" }).click();
   await expect(page.getByRole("list", { name: "Log tags" })).toContainText("Needs Review");
   await page.getByRole("button", { name: "Approve", exact: true }).click();
+  await expect(page.locator(".nav-badge")).toHaveText("5");
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" })).toHaveCount(2);
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Irrigation" })).toContainText("Approved");
   await page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Planting" }).getByRole("button", { name: "View Anthony Wells's log" }).click();
   await page.getByRole("button", { name: "Deny", exact: true }).click();
   await page.getByRole("textbox", { name: "Reason (optional)" }).fill("Incorrect field selected");
   await page.getByRole("button", { name: "Deny Activity" }).click();
+  await expect(page.locator(".nav-badge")).toHaveText("4");
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" })).toHaveCount(1);
   await page.reload();
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Irrigation" })).toContainText("Approved");
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Planting" })).toHaveCount(0);
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Activity Logs" }).click();
   await expect(page).toHaveURL(/\/activity-logs$/);
+  await expect(page.locator(".nav-badge")).toHaveText("4");
   await expect(page.locator(".log-row")).toHaveCount(7);
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Irrigation" })).toContainText("Approved");
   await expect(page.locator(".log-row").filter({ hasText: "Anthony Wells" }).filter({ hasText: "Planting" })).toContainText("Denied");
@@ -172,6 +178,8 @@ test("manager approves and denies submissions; history, reasons, and tags persis
   await expect(page.locator(".log-row")).toHaveCount(1);
   await page.getByRole("combobox", { name: "Activity" }).selectOption("Harvesting");
   await expect(page.getByRole("heading", { name: "No matching logs" })).toBeVisible();
+  await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Employees" }).click();
+  await expect(page.locator(".nav-badge")).toHaveText("4");
 });
 
 test("dashboard metric cards navigate to Activity Logs and Employees", async ({ page }) => {

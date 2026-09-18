@@ -91,6 +91,7 @@ export async function removeEmployeeActivity(logId: string): Promise<Result> {
   }
   revalidatePath("/");
   revalidatePath("/activity-logs");
+  revalidatePath("/employees");
   return { error: "" };
 }
 
@@ -115,6 +116,7 @@ async function decideActivity(logId: string, decision: "approved" | "denied", in
   }
   revalidatePath("/");
   revalidatePath("/activity-logs");
+  revalidatePath("/employees");
   return { error: "" };
 }
 

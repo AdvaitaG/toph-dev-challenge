@@ -71,6 +71,7 @@ export interface DashboardData {
   currentDate: string;
   source: "fixtures" | "supabase";
   metrics: DashboardMetrics;
+  pendingApprovals: number;
   logs: DashboardLog[];
 }
 
@@ -83,5 +84,6 @@ export interface EmployeeContact {
 
 export interface EmployeeDirectoryData {
   farmName: string;
+  pendingApprovals: number;
   employees: EmployeeContact[];
 }

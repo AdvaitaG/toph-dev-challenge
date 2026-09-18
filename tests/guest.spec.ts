@@ -11,7 +11,7 @@ test("a fresh visitor lands on the Figma dashboard and can explore it read-only"
   expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { name: "Dashboard", exact: true })).toBeVisible();
   await expect(page.locator(".farm-identity")).toContainText("Guest Manager");
-  await expect(page.locator(".nav-badge")).toHaveCount(0);
+  await expect(page.locator(".nav-badge")).toHaveText("1");
   await expect(page.locator(".metric-card dd")).toHaveText(["51 New", "12", "90"]);
   await expect(page.locator(".log-row")).toHaveCount(4);
   await expectFrameBox(page, ".sidebar", { x: 10, y: 10, width: 280, height: 935 });
@@ -43,6 +43,7 @@ test("guest can open safe history and directory without contact details or write
   await page.goto("/");
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Activity Logs" }).click();
   await expect(page).toHaveURL(/\/activity-logs$/);
+  await expect(page.locator(".nav-badge")).toHaveText("1");
   await expect(page.locator(".log-row")).toHaveCount(5);
   await page.getByRole("button", { name: "View Alex Rivera's log" }).click();
   await expect(page.getByRole("button", { name: "Approve" })).toHaveCount(0);
@@ -50,6 +51,7 @@ test("guest can open safe history and directory without contact details or write
   await expect(page.getByRole("button", { name: "Add Tag" })).toBeVisible();
   await page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", { name: "Employees" }).click();
   await expect(page.getByRole("heading", { name: "All employees (12)" })).toBeVisible();
+  await expect(page.locator(".nav-badge")).toHaveText("1");
   await expect(page.getByText("Contact details require manager sign-in.")).toBeVisible();
   await expect(page.getByRole("button", { name: /Add email|Edit email/ })).toHaveCount(0);
   await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
