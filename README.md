@@ -1,6 +1,6 @@
 # Toph Dashboard
 
-A desktop farm-activity dashboard built from the supplied screenshots. The current implementation reproduces the default dashboard and inline expanded log while retaining a server-only data boundary for Supabase integration.
+A desktop farm-activity dashboard built from the supplied Figma design, with a Supabase-backed manager and employee workflow. The live app is at [toph-dev-challenge.vercel.app](https://toph-dev-challenge.vercel.app/).
 
 ## Current milestone
 
@@ -17,7 +17,9 @@ The frontend is implemented with a **read-only guest demo at `/`** and a Supabas
 - Manager-only Employees tab with the same workers counted by Active Workers, account-backed contact emails, and an option to add or edit missing addresses.
 - Expand Map dialog, keyboard focus handling, empty results, unavailable-media messages, and contained table scrolling on narrow screens.
 
-**Still pending:** audio files for the original Figma seed recordings, live map locations, and Vercel deployment. Employee-submitted recordings are playable. See [database integration](docs/database-integration.md) for implementation, verification, and tradeoffs.
+**Known limits:** the original Figma seed recordings have no audio files, and the map is a labeled design preview rather than a live location map. Employee-submitted recordings are playable. See [database integration](docs/database-integration.md) for implementation, verification, and tradeoffs.
+
+For a live demonstration, open the public URL to show the original read-only Figma dashboard and expand any of its four logs. Sign in with the existing manager account to show persistent farm data, review decisions, tags, and the employee directory. An employee can sign up or use Google sign-in, submit a written note or voice recording, and see that submission after refresh; the manager can then review it. Guest data is deliberately separate from the signed-in farm data.
 
 The core plan is [docs/build-plan.md](docs/build-plan.md), the user-supplied **Final “Wow Us” Build Plan**. It supersedes the previous Astra/Fugu plan. [Architecture and decisions](docs/architecture.md) describe the refined backend proposal and distinguish it from implemented functionality.
 
@@ -39,7 +41,7 @@ npm run dev
 
 Configure `.env.local` using the public URL/publishable-key names in `.env.example`. Open `http://localhost:3000` to see the read-only guest dashboard immediately. Sign In connects to a provisioned Supabase account assigned to a farm; new Google and email signups become employees, while the existing manager profile retains manager rights. Anyone can create an employee account at `/signup`; after sign-in, employees use `/employee` to submit a note or recording. A manager sees pending and approved submissions on the dashboard, can approve or deny a pending log, and can open `/activity-logs` for complete history or `/employees` for contact details. Denied logs stay in Activity Logs; manager deletion of eligible employee submissions is a separate action. Signing out returns to the guest dashboard. Never commit credentials.
 
-Google sign-in uses Supabase OAuth and `/auth/callback`. The linked project's Google provider is configured for local use. For a production deployment, add the production app callback (`https://<your-domain>/auth/callback`) to Supabase Auth Redirect URLs and set Supabase's Site URL to the production origin so email confirmations return there. Keep the Google provider secret in Supabase, not this repository. The existing confirmed manager Auth account retains its manager profile when Google links to the same identity. New accounts receive employee profiles; browser metadata cannot assign manager access.
+Google sign-in uses Supabase OAuth and `/auth/callback`. The production flow redirects through Google and back to the Vercel app. Keep the Google provider secret in Supabase, not this repository. The existing confirmed manager Auth account retains its manager profile when Google links to the same identity. New accounts receive employee profiles; browser metadata cannot assign manager access.
 
 ```sh
 npm run check
@@ -79,4 +81,4 @@ The public employee signup is intentionally scoped to the single Bays Ranch chal
 
 `.env.example` lists the Supabase URL/publishable-key names consumed by the application. Never expose a service-role key in browser code or commit `.env.local`. Do not use the unrelated parent-directory InsForge application.
 
-The next milestone is described in [docs/frontend-handoff.md](docs/frontend-handoff.md). Commit, push, deployment, and submission require the user's requested milestone. The challenge PDF requires submission Thursday at 8pm and no later commits; verify the organizer's timezone before submission.
+The challenge PDF requires emailing the GitHub repository link by Thursday at 8pm and making no commits after that deadline; it does not specify a timezone. The public repository is [AdvaitaG/toph-dev-challenge](https://github.com/AdvaitaG/toph-dev-challenge).
