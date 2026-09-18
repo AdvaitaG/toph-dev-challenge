@@ -4,7 +4,7 @@ import { login } from "./support/login";
 test("guest landing, login, refresh, logout, and protected re-entry", async ({ page, context }) => {
   const response = await page.goto("/");
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
-  await expect(page.getByText("Guest Manager · Read-only")).toBeVisible();
+  await expect(page.locator(".farm-identity")).toContainText("Guest Manager");
   await expect(page.locator(".log-row")).toHaveCount(4);
   expect(response?.headers()["cache-control"]).toContain("no-store");
   await page.getByRole("link", { name: "Sign In" }).click();
@@ -16,7 +16,7 @@ test("guest landing, login, refresh, logout, and protected re-entry", async ({ p
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
   await page.getByRole("button", { name: "Log Out", exact: true }).click();
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
-  await expect(page.getByText("Guest Manager · Read-only")).toBeVisible();
+  await expect(page.locator(".farm-identity")).toContainText("Guest Manager");
   expect((await context.cookies()).filter((c) => c.name.includes("auth-token"))).toHaveLength(0);
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Dashboard", exact: true })).toBeVisible();
@@ -76,6 +76,6 @@ test("forged session payload is rejected even when it contains a user", async ({
   await context.addCookies([{ ...cookie, value: `base64-${Buffer.from(JSON.stringify(stored)).toString("base64url")}` }]);
   await page.goto("/");
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
-  await expect(page.getByText("Guest Manager · Read-only")).toBeVisible();
+  await expect(page.locator(".farm-identity")).toContainText("Guest Manager");
   await expect(page.locator(".log-row")).toHaveCount(4);
 });

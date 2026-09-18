@@ -30,7 +30,7 @@ test("any visitor can create an employee account and submit activity", async ({ 
   await expect(page.getByText(summary)).toBeVisible();
   await page.getByRole("button", { name: "Log Out" }).click();
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
-  await expect(page.getByText("Guest Manager · Read-only")).toBeVisible();
+  await expect(page.locator(".farm-identity")).toContainText("Guest Manager");
   await page.getByRole("link", { name: "Sign In" }).click();
   await page.getByLabel("Email", { exact: true }).fill(email);
   await page.getByLabel("Password", { exact: true }).fill("local-test-password");

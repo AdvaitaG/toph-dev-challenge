@@ -38,7 +38,7 @@ export function Dashboard({ data }: { data: DashboardData }) {
   return (
     <div className="app-shell">
       <a href="#main-content" className="skip-link">Skip to dashboard</a>
-      <Sidebar activePage="dashboard" farmName={data.farm.name} newCount={data.metrics.newRecordings} onInfo={showDemoInfo} onLogout={logout} loggingOut={loggingOut} guest={guest} onUnavailable={(label) => setNotice({ title: label, text: `${label} is not available in this dashboard preview. You can explore employee logs from the Dashboard.` })} />
+      <Sidebar activePage="dashboard" farmName={data.farm.name} onInfo={showDemoInfo} onLogout={logout} loggingOut={loggingOut} guest={guest} onUnavailable={(label) => setNotice({ title: label, text: `${label} is not available in this dashboard preview. You can explore employee logs from the Dashboard.` })} />
       <main id="main-content" className="dashboard-main">
         <header className="dashboard-header">
           <div><h1>Dashboard</h1><p>An overview of your farm and employee activity</p><Link className="mobile-directory-link" href="/employees">Employees</Link>{guest && <Link className="mobile-directory-link" href="/login">Sign In</Link>}</div>

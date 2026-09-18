@@ -59,7 +59,7 @@ export function EmployeesDirectory({ data, guest = false }: { data: EmployeeDire
 
   return <div className="app-shell">
     <a href="#main-content" className="skip-link">Skip to employees</a>
-    <Sidebar activePage="employees" farmName={data.farmName} newCount={0} onInfo={() => setNotice({ title: "About this farm", text: guest ? "This read-only directory contains sample workers. Their contact details are not public." : "Employee names and contact emails are loaded from your farm database. The original demo workers have no email until one is provided." })} onLogout={logout} loggingOut={loggingOut} guest={guest} onUnavailable={(label) => setNotice({ title: label, text: `${label} is not available in this dashboard preview.` })} />
+    <Sidebar activePage="employees" farmName={data.farmName} onInfo={() => setNotice({ title: "About this farm", text: guest ? "This read-only directory contains sample workers. Their contact details are not public." : "Employee names and contact emails are loaded from your farm database. The original demo workers have no email until one is provided." })} onLogout={logout} loggingOut={loggingOut} guest={guest} onUnavailable={(label) => setNotice({ title: label, text: `${label} is not available in this dashboard preview.` })} />
     <main id="main-content" className={`dashboard-main ${styles.main}`}>
       <header className="dashboard-header">
         <div><h1>Employees</h1><p>{guest ? `Sample workers at ${data.farmName} · Read-only demo` : `Contact information for ${data.farmName} workers`}</p><Link href="/" className={styles.backLink}>← Dashboard</Link>{guest && <Link href="/login" className={styles.backLink}>Sign In</Link>}</div>

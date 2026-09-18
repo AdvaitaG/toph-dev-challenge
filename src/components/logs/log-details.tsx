@@ -115,7 +115,7 @@ export function LogDetails({ log, source, onDecided }: LogDetailsProps) {
       {log.audioUrl && <audio ref={audioRef} src={log.audioUrl} preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} onError={() => { setPlaying(false); setAudioNotice("The recording is unavailable. Please try again later."); }} />}
       {!textOnlySubmission && <button className="detail-button play-button" onClick={toggleAudio}>{playing ? <Pause size={16} /> : <Play size={16} />}{playing ? "Pause Recording" : "Play Recording"}</button>}
       {audioNotice && <p className="control-hint" role="status">{audioNotice}</p>}
-      {source === "supabase" && <button className="detail-button add-tag-button" aria-expanded={tagOpen} onClick={() => setTagOpen(!tagOpen)}><Star size={16} />Add Tag</button>}
+      <button className="detail-button add-tag-button" aria-expanded={source === "supabase" ? tagOpen : undefined} onClick={() => source === "supabase" ? setTagOpen(!tagOpen) : setTagError("Sign in as a manager to save tags.")}><Star size={16} />Add Tag</button>
       {tagOpen && source === "supabase" && <form className="tag-form" onSubmit={addTag} aria-busy={saving}>
         <label htmlFor={`tag-${log.id}`}>Tag name</label>
         <div className="tag-input-row"><input id={`tag-${log.id}`} autoFocus maxLength={40} disabled={saving} value={tagName} onChange={(event) => { setTagName(event.target.value); setTagError(""); }} placeholder="e.g. Needs Review" /><button className="pill pill-active" type="submit" disabled={saving}>{saving ? "Saving…" : "Add"}</button><button className="icon-button" type="button" disabled={saving} aria-label="Cancel adding tag" onClick={() => setTagOpen(false)}><X size={16} /></button></div>
